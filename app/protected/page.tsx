@@ -1,9 +1,9 @@
-import DeployButton from "@/components/DeployButton";
-import AuthButton from "@/components/AuthButton";
+
 import { createClient } from "@/utils/supabase/server";
-import FetchDataSteps from "@/components/tutorial/FetchDataSteps";
-import Header from "@/components/Header";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Navigation from "@/components/Navigation";
+
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -17,41 +17,21 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center">
-      <div className="w-full">
-        <div className="py-6 font-bold bg-purple-950 text-center">
-          This is a protected page that you can only see as an authenticated
-          user
-        </div>
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-            <DeployButton />
-            <AuthButton />
-          </div>
-        </nav>
-      </div>
+    <main className="min-h-screen flex flex-row overflow-x-auto p-2">
+      <Navigation />
 
-      <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-        <Header />
-        <main className="flex-1 flex flex-col gap-6">
-          <h2 className="font-bold text-4xl mb-4">Next steps</h2>
-          <FetchDataSteps />
-        </main>
+      <div className="w-[400px] bg-[#151B3B] rounded-xl p-5 mx-1 shrink-0">
+        <h2>Sales</h2>
       </div>
-
-      <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
-        <p>
-          Powered by{" "}
-          <a
-            href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-            target="_blank"
-            className="font-bold hover:underline"
-            rel="noreferrer"
-          >
-            Supabase
-          </a>
-        </p>
-      </footer>
-    </div>
+      <div className="w-[400px] bg-[#2C193A] rounded-xl p-5 mx-1 shrink-0">
+        <h2>Marketing</h2>
+      </div>
+      <div className="w-[400px] bg-[#152C3B] rounded-xl p-5 mx-1 shrink-0">
+        <h2>Operations</h2>
+      </div>
+      <div className="flex justify-center items-center w-[144px] bg-[#1C2337] rounded-xl p-5 mx-1 shrink-0">
+        <Button>+</Button>
+      </div>
+    </main>
   );
 }
