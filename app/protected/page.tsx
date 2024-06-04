@@ -1,16 +1,11 @@
-
-import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Navigation from "@/components/Navigation";
-
+import Navigation from "./navigation";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     return redirect("/login");
