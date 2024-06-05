@@ -2,7 +2,7 @@ import { Columns4, LayoutDashboard } from "lucide-react";
 import NarrowstackLogo from "@/components/narrowstack-logo";
 import AuthButton from "@/components/auth-button";
 import { Button } from "@/components/ui/button";
-import { StackmapSelect } from "./stackmaps";
+import { StackmapSelect } from "./stackmap-select";
 
 export default function Navigation(){
 

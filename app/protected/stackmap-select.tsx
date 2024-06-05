@@ -11,14 +11,16 @@ import {
 import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
-import supabase from "@/lib/supabase";
 import { signal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
+import { createClient } from "@/utils/supabase/client";
 
 export const stackmap = signal('');
 
 export function StackmapSelect() {
     useSignals();
+    const supabase = createClient();
+
     const [isCreating, setIsCreating] = useState(false);
     const [stackmaps, setStackmaps] = useState([]);
 
@@ -30,13 +32,15 @@ export function StackmapSelect() {
 
         const formData = new FormData(e.target as HTMLFormElement);
         const name = formData.get('name') as string;
-        const { data, error } = await supabase().from('stackmaps').insert([{ name: name }]).select();
+        const { data, error } = await supabase.from('stackmaps').insert([{ name: name }]).select();
         await fetch();
-        stackmap.value = name;
+        console.log(data);
+        //@ts-ignore
+        stackmap.value = data[0].id;
     }
     
     async function fetch(){
-        const { data, error } = await supabase().from('stackmaps').select();
+        const { data, error } = await supabase.from('stackmaps').select();
         console.log('fetch', data);
         setStackmaps(data as any);
     }
@@ -50,7 +54,7 @@ export function StackmapSelect() {
                 <SelectGroup>
                     {stackmaps.map((item) => (
                         // @ts-ignore
-                        <SelectItem key={item.id} value={item.name}>{item.name}</SelectItem>
+                        <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
                     ))}
                 </SelectGroup>
             </SelectContent>
