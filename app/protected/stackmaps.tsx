@@ -12,12 +12,15 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import supabase from "@/lib/supabase";
+import { signal } from "@preact/signals-react";
+import { useSignals } from "@preact/signals-react/runtime";
 
-export default function Stackmaps() {
+export const stackmap = signal('');
 
+export function StackmapSelect() {
+    useSignals();
     const [isCreating, setIsCreating] = useState(false);
     const [stackmaps, setStackmaps] = useState([]);
-    const [stackmap, setStackmap] = useState('');
 
     useEffect(() => { fetch(); }, []);
 
@@ -29,25 +32,25 @@ export default function Stackmaps() {
         const name = formData.get('name') as string;
         const { data, error } = await supabase().from('stackmaps').insert([{ name: name }]).select();
         await fetch();
-        setStackmap(name);
+        stackmap.value = name;
     }
     
     async function fetch(){
-        console.log('fetch');
         const { data, error } = await supabase().from('stackmaps').select();
+        console.log('fetch', data);
         setStackmaps(data as any);
     }
     
     return (
-        <Select onValueChange={value => setStackmap(value)} value={stackmap} defaultValue={stackmap}>
+        <Select onValueChange={(value) => { stackmap.value = value; }} value={stackmap.value} defaultValue={stackmap.value}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                    {stackmaps.map((stackmap) => (
+                    {stackmaps.map((item) => (
                         // @ts-ignore
-                        <SelectItem key={stackmap.id} value={stackmap.name}>{stackmap.name}</SelectItem>
+                        <SelectItem key={item.id} value={item.name}>{item.name}</SelectItem>
                     ))}
                 </SelectGroup>
             </SelectContent>

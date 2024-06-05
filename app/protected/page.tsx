@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Navigation from "./navigation";
 import { createClient } from "@/utils/supabase/server";
+import Areas from "./areas";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -14,7 +15,7 @@ export default async function ProtectedPage() {
   return (
     <main className="min-h-screen flex flex-row overflow-x-auto p-2">
       <Navigation />
-
+      <Areas />
       <div className="w-[400px] bg-[#151B3B] rounded-xl p-5 mx-1 shrink-0">
         <h2>Sales</h2>
       </div>
