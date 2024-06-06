@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Navigation from "./navigation";
 import { createClient } from "@/utils/supabase/server";
-import Areas from "./areas";
+import Stackmap from "./stackmap";
 
 export default async function ProtectedPage() {
   const supabase = createClient();
@@ -15,7 +15,7 @@ export default async function ProtectedPage() {
   return (
     <main className="min-h-screen flex flex-row p-2">
       <Navigation />
-      <Areas />
+      <Stackmap />
     </main>
   );
 }

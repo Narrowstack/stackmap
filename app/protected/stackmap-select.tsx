@@ -12,10 +12,10 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { signal } from "@preact/signals-react";
-import { useSignals } from "@preact/signals-react/runtime";
+import { useSignalEffect, useSignals } from "@preact/signals-react/runtime";
 import { createClient } from "@/utils/supabase/client";
 
-export const stackmap = signal('');
+export const stackmapId = signal('');
 
 export function StackmapSelect() {
     useSignals();
@@ -24,29 +24,39 @@ export function StackmapSelect() {
     const [isCreating, setIsCreating] = useState(false);
     const [stackmaps, setStackmaps] = useState([]);
 
-    useEffect(() => { fetch(); }, []);
+    useEffect(() => {
+        (async () => {
+            await fetchStackmaps();
+            const localStackmapId = localStorage.getItem('stackmapId') as string;
+            if(localStackmapId) stackmapId.value = localStackmapId;
+        })();
+    }, []);
 
-    async function create(e: React.FormEvent){
+    useSignalEffect(() => { 
+        if(stackmapId.value !== '') localStorage.setItem('stackmapId', stackmapId.value as string); 
+    });
+
+    async function createStackmap(e: React.FormEvent){
         e.preventDefault();
         setIsCreating(false);
+        const { data: { user } } = await supabase.auth.getUser();
 
         const formData = new FormData(e.target as HTMLFormElement);
         const name = formData.get('name') as string;
-        const { data, error } = await supabase.from('stackmaps').insert([{ name: name }]).select();
-        await fetch();
-        console.log(data);
+        const { data, error } = await supabase.from('stackmaps').insert([{ name: name, user: user?.id }]).select();
+        await fetchStackmaps();
         //@ts-ignore
-        stackmap.value = data[0].id;
+        stackmapId.value = data[0].id;
     }
     
-    async function fetch(){
-        const { data, error } = await supabase.from('stackmaps').select();
-        console.log('fetch', data);
+    async function fetchStackmaps() {
+        const { data: { user } } = await supabase.auth.getUser();
+        const { data, error } = await supabase.from('stackmaps').select().eq('user', user?.id);
         setStackmaps(data as any);
     }
     
     return (
-        <Select onValueChange={(value) => { stackmap.value = value; }} value={stackmap.value} defaultValue={stackmap.value}>
+        <Select onValueChange={(value) => stackmapId.value = value} defaultValue={stackmapId.value}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue />
             </SelectTrigger>
@@ -59,7 +69,7 @@ export function StackmapSelect() {
                 </SelectGroup>
             </SelectContent>
             {isCreating ? (
-                <form onSubmit={create}>
+                <form onSubmit={createStackmap}>
                     <Input type="text" name="name" />
                     <Button asChild><button type="submit">Create</button></Button>
                     <Button onClick={() => setIsCreating(false)}>x</Button>
