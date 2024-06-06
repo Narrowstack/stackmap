@@ -56,7 +56,7 @@ export function StackmapSelect() {
     }
     
     return (
-        <Select onValueChange={(value) => stackmapId.value = value} defaultValue={stackmapId.value}>
+        <Select onValueChange={(value) => stackmapId.value = value} value={stackmapId.value}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue />
             </SelectTrigger>
