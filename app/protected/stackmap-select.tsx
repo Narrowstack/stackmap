@@ -14,6 +14,8 @@ import { Button } from "../../components/ui/button";
 import { signal } from "@preact/signals-react";
 import { useSignalEffect, useSignals } from "@preact/signals-react/runtime";
 import { createClient } from "@/utils/supabase/client";
+import { Check, Plus, X } from "lucide-react";
+import CreateButton from "@/components/create-button";
 
 export const stackmapId = signal('');
 
@@ -56,28 +58,21 @@ export function StackmapSelect() {
     }
     
     return (
-        <Select onValueChange={(value) => stackmapId.value = value} value={stackmapId.value}>
-            <SelectTrigger className="w-[180px]">
-                <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectGroup>
-                    {stackmaps.map((item) => (
-                        // @ts-ignore
-                        <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
-                    ))}
-                </SelectGroup>
-            </SelectContent>
-            {isCreating ? (
-                <form onSubmit={createStackmap}>
-                    <Input type="text" name="name" />
-                    <Button asChild><button type="submit">Create</button></Button>
-                    <Button onClick={() => setIsCreating(false)}>x</Button>
-                </form>
-            ):(
-                <Button onClick={() => setIsCreating(true)}>+</Button>
-            )}
-            
-        </Select>
+        <div className="text-left">
+            <Select onValueChange={(value) => stackmapId.value = value} defaultValue={stackmapId.value}>
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                        {stackmaps.map((item) => (
+                            // @ts-ignore
+                            <SelectItem key={item.id} value={item.id}>{item.name}</SelectItem>
+                        ))}
+                    </SelectGroup>
+                </SelectContent>
+            </Select>
+            <CreateButton handleSubmit={createStackmap} />
+        </div>
     );
 }

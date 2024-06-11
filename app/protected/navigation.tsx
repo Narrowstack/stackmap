@@ -7,8 +7,8 @@ import { StackmapSelect } from "./stackmap-select";
 export default function Navigation(){
 
     return (
-        <div className="w-[232px] bg-[#111727] rounded-xl p-5 mx-1 shrink-0 flex flex-col justify-between">
-            <div>
+        <div className="w-[232px] bg-[#111727] rounded-xl px-3 py-5 mx-1 shrink-0 flex flex-col justify-between">
+            <div className="text-center">
                 <NarrowstackLogo />
                 <StackmapSelect />
                 
