@@ -14,8 +14,11 @@ type Props = {
 
 export default function Area({ id, name }: Props) {
     useEffect(() => {
-        fetchCapabilities();
-        fetchTechnologyMaps();
+        (async () => {
+            await fetchCapabilities();
+            await fetchTechnologies();
+            await fetchTechnologyMaps();
+        })();
     }, []);
     
     const [capabilities, setCapabilities] = useState([]);
@@ -84,9 +87,6 @@ export default function Area({ id, name }: Props) {
         const { data, error } = await supabase.from('technologies').select();
         setTechnologies(data as any);
     }
-
-
-    
     
     return (
         <div className="w-[400px] bg-[#151B3B] rounded-xl px-3 py-5 mx-1 shrink-0 overflow-y-auto">
