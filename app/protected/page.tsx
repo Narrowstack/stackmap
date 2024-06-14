@@ -13,7 +13,7 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-row p-2">
+    <main className="h-screen flex flex-row p-2">
       <Navigation />
       <Stackmap />
     </main>

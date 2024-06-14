@@ -33,7 +33,7 @@ export default function Stackmap() {
     }
 
     return (
-        <div className="flex overflow-x-auto">
+        <div className="flex h-full overflow-x-auto">
             {areas?.map((area) => (
                 //@ts-ignore
                 <Area key={area.id} id={area.id} name={area.name} />
